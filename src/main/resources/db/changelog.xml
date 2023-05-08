@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="createTableOne" author="samit" context="prod, qa">
+        <createTable tableName="table_one">
+            <column name="id" type="int"/>
+            <column name="name" type="varchar(50)"/>
+        </createTable>
+        <addUniqueConstraint tableName="table_one" columnNames="id" constraintName="uk_table_one_id"/>
+        <comment>Created table_one and added unique constraint on id column</comment>
+    </changeSet>
+
+    <changeSet id="createTableTwo" author="samit" context="prod, qa">
+        <sql>CREATE TABLE table_two (id int, name varchar(50));</sql>
+    </changeSet>
+
+    <changeSet id="create_table_accounts" author="samit" context="prod, qa">
+        <sqlFile path="db/schema/01_table_accounts.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <dropTable tableName="accounts"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_users" author="samit" context="prod, qa">
+        <sqlFile path="db/schema/02_table_users.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <dropTable tableName="users"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_account_types" author="samit" context="prod, qa">
+        <sqlFile path="db/schema/03_types_account_types.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="rename_accounts_col_name_account_type" author="samit" context="prod, qa">
+        <sqlFile path="db/schema/04_alter_col_name_account_type.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="create_view" author="samit" context="prod, qa" runOnChange="true">
+        <sqlFile path="db/schema/05_view_account_user.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="insert_data" author="samit" context="prod, qa">
+        <sqlFile path="db/schema/insert.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+</databaseChangeLog>
